@@ -15,17 +15,6 @@ Parameters:
   WebAuthFunctionRoleArn:
     Type: String
 Resources:
-  WebAuthFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: Authenticates incoming requests against cognito
-      Role: !Ref WebAuthFunctionRoleArn
-      AutoPublishAlias: live
-      Handler: index.handler
-      Runtime: nodejs12.x
-      CodeUri: ./dist
-      MemorySize: 128
-      Timeout: 5
   CloudfrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -48,9 +37,6 @@ Resources:
             Cookies:
               Forward: none
             QueryString: false
-          LambdaFunctionAssociations:
-            - EventType: viewer-request
-              LambdaFunctionARN: !Join [":", [!GetAtt WebAuthFunction.Arn, !GetAtt WebAuthFunction.Version.Version]]
         Origins:
           - DomainName: !Ref OriginDomain
             Id: secure-website
