@@ -3,7 +3,16 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
-const cognitoVars = require('./cognitoVars');
+const cognitoVars = require('./cognitoVars.js');
+//{
+//    USERPOOLID: "eu-west-1_SDYdXqOax",
+//    JWKS: {"keys":[{"alg":"RS256","e":"AQAB","kid":"GAVKse6b5nxHNnJCB6prxB5z2XdPf66H+RvbaqF61eM=","kty":"RSA","n":"hIYDI2oxEEU0YjQsWEp3wvyqGxUYPaFf63fuNPV9QJyNicDn5VHQzWsxeP5YeBLNyXTa8TSMH_gOxjpBmVaTL0qxfQKiYWd89l-P3lhoSPUsnpq7CtOoyMsfHi-fpUWAn0SG0D0LZFaGO8yMBA2EzNNpBxXLyeaxaN1YHvA_yDnrZRalnXbhH60ZeOiDCjsyZ-SHSPB6EwVRXlUCbf79yaUgqBpkhzQN_TrPz6UDk9cQbGqns6VgC2b4Z8bk5n3gSIFghNsdDOgju2IWix9UMV4a-rbTcd7XzF1OhA2rz7_yhxjnC_VdECmWB-765U_do5GtnwEvwczzbZJGBSW-RQ","use":"sig"},{"alg":"RS256","e":"AQAB","kid":"F5cEdJ4lYVLpDmJMkb8y9ZTH8jtdLBn5SDDsu4ARAYY=","kty":"RSA","n":"vm4mb4VrsOy_x-u6v28cVwuoIzKaFiavwaz_XqhsiypH9Qjj5ngOfv7rcViAB8kqS2AeBP8yFFCcI-hnr9qZrr2jkRA6cF8gIQ57ctmGs3FS9zaPQFe4VM5WFJjK7fd8DyIXo7LOUMi0Nox2RizA8BFxhKIFH-pbLscBaQu51XWvehIZVrGqVx0WnMsviJURhbpFUYZUJzvS9_wZIDQakrSN5uu6cDAfoi3NcUzowRSTsNSVv88xNEBST6o9OtkD7aGhZNF3Uzeizv9pKi-eJRBt-2G9W9E8OS4yiwgfDbizatFUM2dwt8Fv9WHQmDcewiUdsjstruHStdmaA44Oew","use":"sig"}]}, // extracted with "curl -s https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_SDYdXqOax/.well-known/jwks.json"
+//    REGION: "eu-west-1",
+//    CLIENTID: "7usqbgt333o76rv2kvp1khpej1",
+//    SITE_DOMAIN: "portal.track.vixpulse.com",
+//    AUTH_DOMAIN: "auth.portal.track.vixpulse.com",
+//    CLIENT_SECRET: "d81329dpgtlft04v2vmrrrf9u8co0voto76e6pnmmahg8ceqc8h"
+//}
 const https = require('https');
 const querystring = require('querystring');
 const keys = cognitoVars.JWKS.keys;
@@ -19,11 +28,11 @@ const redirectUri = 'https://'.concat(cognitoVars.SITE_DOMAIN, '/index.html');
 
 // The URI of the login server
 const loginURI = 'https://'.concat(cognitoVars.AUTH_DOMAIN,
-																	 '/authorize?code_challenge_method=S256&response_type=code&scope=openid&client_id=',
-																	 cognitoVars.CLIENTID,
-																	 '&redirect_uri=',
-																	 redirectUri,
-																	 '&state=');
+								 '/authorize?code_challenge_method=S256&response_type=code&scope=openid&client_id=',
+								 cognitoVars.CLIENTID,
+								 '&redirect_uri=',
+								 redirectUri,
+								 '&state=');
 
 // A buffer to hold random values
 var stateBuffer = null;
@@ -153,10 +162,10 @@ const authorize = async (code, cookies) => {
 					value: 'CodeVerifier=;Max-Age=0;Secure;HttpOnly;SameSite=Strict;Domain='.concat(cognitoVars.SITE_DOMAIN)
 				},{
 					value: 'AccessToken='.concat(body.access_token,
-																			 ';Max-Age=',
-																			 body.expires_in,
-																			 ';Secure;HttpOnly;SameSite=Strict;Domain=',
-																			 cognitoVars.SITE_DOMAIN)
+												 ';Max-Age=',
+												 body.expires_in,
+												 ';Secure;HttpOnly;SameSite=Strict;Domain=',
+												 cognitoVars.SITE_DOMAIN)
 				}]
 			}
 		};
@@ -197,18 +206,18 @@ const authenticate = async () => {
 		headers: {
 			'location': [{
 				value: loginURI.concat(stateVal,
-															 "&code_challenge=",
-															 base64URLEncode(crypto.createHash('sha256').update(codeVerifier).digest()))
+									 "&code_challenge=",
+									 base64URLEncode(crypto.createHash('sha256').update(codeVerifier).digest()))
 
 			}],
 			'set-cookie': [{
 				value: 'AuthState='.concat(stateVal,
-																	 ';Max-Age=3600;Secure;HttpOnly;SameSite=Strict;Domain=',
-																	 cognitoVars.SITE_DOMAIN)
+										 ';Max-Age=3600;Secure;HttpOnly;SameSite=Strict;Domain=',
+										 cognitoVars.SITE_DOMAIN)
 			},{
 				value: 'CodeVerifier='.concat(codeVerifier,
-																			';Max-Age=3600;Secure;HttpOnly;SameSite=Strict;Domain=',
-																			cognitoVars.SITE_DOMAIN)
+											';Max-Age=3600;Secure;HttpOnly;SameSite=Strict;Domain=',
+											cognitoVars.SITE_DOMAIN)
 			}]
 		}
 	};
