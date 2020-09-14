@@ -30,7 +30,7 @@ variable "domain" {
 }
 
 variable "github_branch" {
-	default     = "master"
+	default     = "track-portal"
 	description = "The GitHub branch to pull the lambda function from"
 	type        = string
 }

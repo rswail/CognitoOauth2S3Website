@@ -54,7 +54,7 @@ resource "aws_s3_bucket" "build-artifacts" {
 # Website that requires authentication
 resource "aws_s3_bucket" "secure-site" {
 	provider      = aws.site
-	bucket        = "${var.domain}"
+	bucket        = "var.domain"
 	force_destroy = true
 
 	# Server side encryption is not KMS because cloudfront can't decrypt KMS
