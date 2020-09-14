@@ -42,7 +42,7 @@ variable "github_oauth_token" {
 }
 
 variable "github_owner" {
-	default     = "holy-order-of-the-lambda-cube"
+	default     = "rswail"
 	description = "The GitHub owner to pull the lambda function from"
 	type        = string
 }
