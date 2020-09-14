@@ -22,7 +22,7 @@ Resources:
       Role: !Ref WebAuthFunctionRoleArn
       AutoPublishAlias: live
       Handler: index.handler
-      Runtime: nodejs8.10
+      Runtime: nodejs12.x
       CodeUri: ./dist
       MemorySize: 128
       Timeout: 5
