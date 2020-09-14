@@ -422,7 +422,7 @@ data "aws_iam_policy_document" "cpln-dpl" {
 
 	statement {
 		actions = [
-			"cloudformation:*
+			"cloudformation:*"
 		]
 
 		resources = ["arn:aws:cloudformation:us-east-1:${var.aws_account_id}:stack/${var.name_prefix}secure-site/*"]
