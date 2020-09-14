@@ -44,6 +44,10 @@ Resources:
           Compress: true
           TargetOriginId: secure-website
           ViewerProtocolPolicy: redirect-to-https
+          ForwardedValues:
+            Cookies:
+              Forward: none
+            QueryString: false
           LambdaFunctionAssociations:
             - EventType: viewer-request
               LambdaFunctionARN: !Join [":", [!GetAtt WebAuthFunction.Arn, !GetAtt WebAuthFunction.Version.Version]]
