@@ -36,7 +36,7 @@ Resources:
         DefaultRootObject: index.html
         Enabled: true
         HttpVersion: http2
-        IPV6Enabled: false
+        IPV6Enabled: true
         PriceClass: PriceClass_100
         DefaultCacheBehavior:
           AllowedMethods: ["GET", "HEAD", "OPTIONS"]
@@ -44,10 +44,6 @@ Resources:
           Compress: true
           TargetOriginId: secure-website
           ViewerProtocolPolicy: redirect-to-https
-          ForwardedValues:
-            Cookies:
-              Forward: none
-            QueryString: false
           LambdaFunctionAssociations:
             - EventType: viewer-request
               LambdaFunctionARN: !Join [":", [!GetAtt WebAuthFunction.Arn, !GetAtt WebAuthFunction.Version.Version]]
@@ -56,11 +52,6 @@ Resources:
             Id: secure-website
             S3OriginConfig:
               OriginAccessIdentity: !Ref OriginAccessIdentity
-        Restrictions:
-          GeoRestriction:
-            Locations:
-              - US
-            RestrictionType: whitelist
         ViewerCertificate:
           AcmCertificateArn: !Ref CertificateArn
           MinimumProtocolVersion: TLSv1.1_2016
