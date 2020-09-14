@@ -574,7 +574,7 @@ data "aws_iam_policy_document" "codebuild" {
 	statement {
 		actions = [
 			"logs:CreateLogStream",
-			"logs:PutLogEvents",
+			"logs:PutLogEvents"
 		]
 
 		resources = ["arn:aws:logs:us-east-1:${var.aws_account_id}:log-group:/aws/codebuild/*"]
@@ -644,7 +644,8 @@ data "aws_iam_policy_document" "codepipeline-cloudformation-deploy" {
 			"lambda:TagResource",
 			"lambda:UntagResource",
 			"lambda:UpdateAlias",
-			"lambda:UpdateFunctionCode"
+			"lambda:UpdateFunctionCode",
+            "iam:CreateServiceLinkedRole"
 		]
 
 		resources = ["arn:aws:lambda:us-east-1:${var.aws_account_id}:function:${aws_codepipeline.secure-site.name}-WebAuthFunction-*"]
@@ -662,7 +663,11 @@ data "aws_iam_policy_document" "codepipeline-cloudformation-deploy" {
 
 	statement {
 		actions = [
-			"cloudfront:*",
+			"cloudfront:CreateDistribution",
+            "cloudfront:DeleteDistribution",
+            "cloudfront:GetDistribution",
+            "cloudfront:TagResource",
+            "cloudfront:UpdateDistribution"
 		]
 
 		resources = ["*"]
