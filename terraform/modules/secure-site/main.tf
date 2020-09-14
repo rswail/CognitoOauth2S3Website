@@ -662,11 +662,7 @@ data "aws_iam_policy_document" "codepipeline-cloudformation-deploy" {
 
 	statement {
 		actions = [
-			"cloudfront:CreateDistribution",
-			"cloudfront:DeleteDistribution",
-			"cloudfront:GetDistribution",
-			"cloudfront:TagResource",
-			"cloudfront:UpdateDistribution"
+			"cloudfront:*",
 		]
 
 		resources = ["*"]
