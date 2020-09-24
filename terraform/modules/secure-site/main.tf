@@ -629,13 +629,35 @@ data "aws_iam_policy_document" "codepipeline-cloudformation-deploy" {
 		resources = ["arn:aws:cloudformation:us-east-1:aws:transform/Serverless-2016-10-31"]
 	}
 
+    statement {
+        actions = [
+            "lambda:GetFunction"
+        ]
+        resources = ["arn:aws:lambda:us-east-1:${var.aws_account_id}:function:${aws_codepipeline.secure-site.name}-WebAuthFunction-*:*"]
+    }
+
+    statement {
+        actions = [
+            "lambda:EnableReplication*"
+        ]
+        resources = ["arn:aws:lambda:us-east-1:${var.aws_account_id}:function:${aws_codepipeline.secure-site.name}-WebAuthFunction-*"]
+    }
+
+    statement {
+        actions = [
+            "iam:CreateServiceLinkedRole"
+        ]
+        resources = [ "*" ]
+    }
+
+            
 	statement {
 		actions = [
 			"lambda:CreateAlias",
 			"lambda:CreateFunction",
 			"lambda:DeleteAlias",
 			"lambda:DeleteFunction",
-			"lambda:EnableReplication",
+			"lambda:EnableReplication*",
 			"lambda:GetFunction",
 			"lambda:GetFunctionConfiguration",
 			"lambda:ListTags",
